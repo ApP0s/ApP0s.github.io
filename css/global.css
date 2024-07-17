@@ -17,4 +17,10 @@ tr:nth-child(even) {
 .head-font {
     font-size: 50px;
 }
-  
+
+.total-amount {
+    border: 2px solid black;
+    padding: 10px;
+    background-color: lightgray;
+    font-weight: bold;
+}
