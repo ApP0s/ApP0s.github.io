@@ -1,3 +1,5 @@
+
+
 table {
     border-collapse: collapse;
     width: 100%;
@@ -13,5 +15,8 @@ tr:nth-child(even) {
     margin-top: 10px;
     width: 200px;
     border-radius: 6px;
+}
+.head-font {
+    font-size: 50px;
 }
   
