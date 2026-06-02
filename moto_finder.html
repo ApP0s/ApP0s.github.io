@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>เลือกมอเตอร์ไซค์คันแรก</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Bai+Jamjuree:wght@400;500;600;700&family=Archivo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#efe7d6;
+    --paper2:#e6dcc6;
+    --ink:#22201b;
+    --ink2:#5a5446;
+    --oxblood:#8a2b2b;
+    --rust:#c4622d;
+    --teal:#1f4d44;
+    --teal2:#2c6b5e;
+    --chrome:#b8b2a3;
+    --gold:#caa14a;
+    --line:#c9bda3;
+    --shadow:0 8px 28px rgba(34,32,27,.18);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:'Bai Jamjuree','Archivo',sans-serif;
+    background:
+      radial-gradient(circle at 20% 0%, #f4ecdb 0%, transparent 55%),
+      radial-gradient(circle at 90% 100%, #e2d7bf 0%, transparent 50%),
+      var(--paper);
+    color:var(--ink);
+    min-height:100vh;
+    padding:28px 16px 60px;
+    background-attachment:fixed;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    opacity:.6;
+  }
+  .wrap{max-width:1080px;margin:0 auto;position:relative;z-index:1}
+
+  /* HEADER */
+  header{text-align:center;margin-bottom:8px}
+  .kicker{
+    font-family:'Archivo',sans-serif;letter-spacing:.45em;font-size:11px;
+    text-transform:uppercase;color:var(--oxblood);font-weight:700;margin-bottom:6px;
+  }
+  h1{
+    font-family:'Anton',sans-serif;font-weight:400;
+    font-size:clamp(38px,8vw,76px);line-height:.92;text-transform:uppercase;
+    color:var(--ink);letter-spacing:.01em;
+  }
+  h1 span{color:var(--oxblood);-webkit-text-stroke:0}
+  .rule{
+    width:120px;height:3px;background:var(--ink);margin:14px auto 4px;position:relative;
+  }
+  .rule::before,.rule::after{content:"";position:absolute;top:-3px;width:9px;height:9px;background:var(--oxblood);transform:rotate(45deg)}
+  .rule::before{left:-16px}.rule::after{right:-16px}
+  .sub{font-size:14px;color:var(--ink2);margin-top:10px}
+
+  /* PROFILE STRIP */
+  .profile{
+    background:var(--ink);color:var(--paper);border-radius:14px;
+    padding:16px 18px;margin:26px 0 22px;box-shadow:var(--shadow);
+    display:flex;flex-wrap:wrap;gap:10px 22px;align-items:center;justify-content:center;
+  }
+  .profile .lbl{font-family:'Archivo';font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);width:100%;text-align:center;margin-bottom:4px}
+  .chip-p{font-size:13px;display:flex;align-items:center;gap:7px;color:#f0e8d8}
+  .chip-p b{color:#fff}
+  .dotg{width:7px;height:7px;border-radius:50%;background:var(--rust)}
+
+  /* CONTROLS */
+  .controls{margin-bottom:22px}
+  .control-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px}
+  .control-row .ctitle{
+    font-family:'Archivo';font-size:10px;letter-spacing:.25em;text-transform:uppercase;
+    color:var(--ink2);font-weight:700;margin-right:6px;width:64px;
+  }
+  .pill{
+    font-family:'Bai Jamjuree';font-size:13px;font-weight:600;
+    padding:7px 14px;border:1.5px solid var(--ink);border-radius:30px;
+    background:transparent;color:var(--ink);cursor:pointer;transition:.18s;
+  }
+  .pill:hover{background:var(--paper2)}
+  .pill.active{background:var(--ink);color:var(--paper);box-shadow:0 3px 10px rgba(34,32,27,.25)}
+  .pill.cat.active{background:var(--teal);border-color:var(--teal)}
+  .pill.bud.active{background:var(--oxblood);border-color:var(--oxblood)}
+  .pill.sort.active{background:var(--rust);border-color:var(--rust)}
+
+  /* COUNT */
+  .count{font-size:13px;color:var(--ink2);margin-bottom:14px;font-weight:500}
+  .count b{color:var(--oxblood);font-weight:700}
+
+  /* GRID */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:18px}
+  .card{
+    background:linear-gradient(165deg,#fbf6ea,#f0e7d4);
+    border:1px solid var(--line);border-radius:16px;padding:0;overflow:hidden;
+    box-shadow:var(--shadow);position:relative;transition:.22s;display:flex;flex-direction:column;
+  }
+  .card:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(34,32,27,.24)}
+  .card.top{border:2px solid var(--gold)}
+  .card.top::after{
+    content:"★ ตรงโจทย์ที่สุด";position:absolute;top:14px;right:-34px;
+    background:var(--gold);color:var(--ink);font-family:'Archivo';font-weight:800;
+    font-size:10px;letter-spacing:.12em;padding:5px 40px;transform:rotate(45deg);
+    box-shadow:0 2px 6px rgba(0,0,0,.2);
+  }
+  .card-head{padding:18px 18px 12px;border-bottom:1px dashed var(--line);position:relative}
+  .badge-cat{
+    font-family:'Archivo';font-size:9px;letter-spacing:.2em;text-transform:uppercase;
+    font-weight:800;padding:3px 9px;border-radius:4px;color:#fff;display:inline-block;margin-bottom:9px;
+  }
+  .brand{font-family:'Archivo';font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--ink2);font-weight:600}
+  .model{font-family:'Anton';font-size:27px;line-height:1;text-transform:uppercase;color:var(--ink);margin-top:1px}
+  .cc{font-size:12px;color:var(--rust);font-weight:700;margin-top:4px;letter-spacing:.04em}
+
+  .card-body{padding:14px 18px 16px;flex:1;display:flex;flex-direction:column}
+  .pricerow{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:12px}
+  .price .pl{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink2);font-family:'Archivo';font-weight:700}
+  .price .pv{font-family:'Anton';font-size:26px;color:var(--oxblood);line-height:1}
+  .price .pv small{font-size:13px;color:var(--ink2);font-family:'Bai Jamjuree';font-weight:600}
+  .monthly{text-align:right}
+  .monthly .ml{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink2);font-family:'Archivo';font-weight:700}
+  .monthly .mv{font-family:'Bai Jamjuree';font-size:18px;font-weight:700;color:var(--teal)}
+  .monthly .mv span{font-size:11px;color:var(--ink2);font-weight:500}
+
+  .match{margin:6px 0 12px}
+  .match-lbl{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink2);font-family:'Archivo';font-weight:700;margin-bottom:6px}
+  .bars{display:flex;gap:3px}
+  .seg{flex:1;height:7px;border-radius:2px;background:var(--paper2);border:1px solid var(--line)}
+  .seg.on{background:var(--teal);border-color:var(--teal)}
+  .match-score{font-size:11px;color:var(--ink2);margin-top:5px;font-weight:600}
+  .match-score b{color:var(--teal2)}
+
+  .tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:auto}
+  .tag{font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px;background:var(--paper2);color:var(--ink2);border:1px solid var(--line)}
+  .tag.good{background:#e4efe5;color:var(--teal);border-color:#bcd6bf}
+  .tag.warn{background:#f6e7da;color:var(--rust);border-color:#e6c9ad}
+
+  .note{
+    font-size:12px;color:var(--ink2);margin-top:11px;padding-top:11px;
+    border-top:1px dashed var(--line);line-height:1.5;
+  }
+
+  /* FOOTER */
+  .foot{text-align:center;margin-top:34px;font-size:12px;color:var(--ink2);line-height:1.7}
+  .foot b{color:var(--oxblood)}
+  .empty{text-align:center;padding:50px;color:var(--ink2);font-size:15px;grid-column:1/-1}
+
+  @media(max-width:560px){
+    .control-row .ctitle{width:100%;margin-bottom:2px}
+    .profile{gap:8px 16px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="kicker">First Bike · Buyer's Guide</div>
+    <h1>เลือก<span>คันแรก</span><br>ในชีวิต</h1>
+    <div class="rule"></div>
+    <p class="sub">รวมรถสาย Vintage / Classic ในไทย — กรองตามงบ สไตล์ และความเหมาะกับคุณ</p>
+  </header>
+
+  <div class="profile">
+    <div class="lbl">โปรไฟล์ของคุณ</div>
+    <div class="chip-p"><span class="dotg"></span> เงินเดือน <b>30,000฿</b></div>
+    <div class="chip-p"><span class="dotg"></span> ผ่อนไหว <b>~5,000฿/ด</b></div>
+    <div class="chip-p"><span class="dotg"></span> <b>เมือง + ต่างจังหวัด</b></div>
+    <div class="chip-p"><span class="dotg"></span> นั่ง <b>2 คน</b></div>
+    <div class="chip-p"><span class="dotg"></span> ชอบ <b>Vintage</b></div>
+    <div class="chip-p"><span class="dotg"></span> <b>มือใหม่</b></div>
+  </div>
+
+  <div class="controls">
+    <div class="control-row" id="catRow">
+      <span class="ctitle">สไตล์</span>
+      <button class="pill cat active" data-cat="all">ทั้งหมด</button>
+      <button class="pill cat" data-cat="classic">Classic</button>
+      <button class="pill cat" data-cat="cruiser">Cruiser</button>
+      <button class="pill cat" data-cat="cafe">Cafe Racer</button>
+      <button class="pill cat" data-cat="scrambler">Scrambler</button>
+      <button class="pill cat" data-cat="naked">Naked Vintage</button>
+    </div>
+    <div class="control-row" id="budRow">
+      <span class="ctitle">งบ</span>
+      <button class="pill bud active" data-bud="all">ทุกราคา</button>
+      <button class="pill bud" data-bud="low">ต่ำกว่า 1.5 แสน</button>
+      <button class="pill bud" data-bud="mid">1.5–2.5 แสน</button>
+      <button class="pill bud" data-bud="high">2.5 แสนขึ้นไป</button>
+      <button class="pill bud" data-bud="fit">ผ่อนไหว (≤5,000฿)</button>
+    </div>
+    <div class="control-row" id="sortRow">
+      <span class="ctitle">เรียง</span>
+      <button class="pill sort active" data-sort="match">ตรงโจทย์</button>
+      <button class="pill sort" data-sort="priceAsc">ราคาน้อย→มาก</button>
+      <button class="pill sort" data-sort="ccDesc">แรง→เบา</button>
+    </div>
+  </div>
+
+  <div class="count" id="count"></div>
+  <div class="grid" id="grid"></div>
+
+  <div class="foot">
+    คะแนน "ตรงโจทย์" คำนวณจากโปรไฟล์ของคุณ (Vintage · 2 คน · ทางไกล · ผ่อนไหว · มือใหม่)<br>
+    ราคา/ค่าผ่อนเป็นค่าโดยประมาณ ปี 2025 — <b>ควรเช็กกับศูนย์อีกครั้งก่อนตัดสินใจ</b> และลองไปนั่งจริงเสมอ
+  </div>
+</div>
+
+<script>
+const CATS = {
+  classic:{name:'Classic',color:'#1f4d44'},
+  cruiser:{name:'Cruiser',color:'#8a2b2b'},
+  cafe:{name:'Cafe Racer',color:'#c4622d'},
+  scrambler:{name:'Scrambler',color:'#6b5630'},
+  naked:{name:'Naked Vintage',color:'#3a3f8a'}
+};
+
+// match: [vintage, twoUp, touring, payOk, beginner] each 0-2
+const BIKES = [
+  {brand:'Royal Enfield',model:'Classic 650',cat:'classic',cc:648,eng:'Twin 47hp',price:249000,monthly:4200,top:true,
+   match:[2,2,2,2,1],
+   tags:[['Vintage แท้','good'],['Twin นุ่ม','good'],['ทางไกลดี','good']],
+   note:'Vintage ชัดที่สุดในกลุ่ม 650 · ราคาดีสุด · เพิ่งเปิดไทย รับประกัน 3 ปี'},
+
+  {brand:'Royal Enfield',model:'Meteor 350',cat:'cruiser',cc:349,eng:'Single 20hp',price:175000,monthly:4000,
+   match:[2,2,1,2,2],
+   tags:[['เบาะเตี้ย 765mm','good'],['ผ่อนถูก','good'],['สั่นนิดๆ','warn']],
+   note:'Cruiser vintage · สูง 175 นั่งสบายมาก · มือใหม่ขับง่ายสุด'},
+
+  {brand:'Royal Enfield',model:'Classic 350',cat:'classic',cc:349,eng:'Single 20hp',price:170000,monthly:3900,
+   match:[2,1,1,2,2],
+   tags:[['คลาสสิกแท้','good'],['ผ่อนถูก','good'],['ช้านิด','warn']],
+   note:'หน้าตาคลาสสิกที่สุดของ RE · เบา ขับง่าย เหมาะมือใหม่'},
+
+  {brand:'Royal Enfield',model:'Interceptor 650',cat:'cafe',cc:648,eng:'Twin 47hp',price:265000,monthly:4500,
+   match:[2,1,2,1,1],
+   tags:[['Cafe Racer','good'],['Twin แรงพอ','good'],['ผ่อนเริ่มหนัก','warn']],
+   note:'Cafe racer ย้อนยุค · ขับสนุก · เบาะหลังเล็กกว่า Super Meteor'},
+
+  {brand:'Royal Enfield',model:'Super Meteor 650',cat:'cruiser',cc:648,eng:'Twin 47hp',price:269000,monthly:4500,
+   match:[2,2,2,1,1],
+   tags:[['สองคนเทพ','good'],['ทางไกลสบาย','good'],['หนักนิด','warn']],
+   note:'Cruiser ทางไกล · เบาะใหญ่สุด นั่งสองคนสบายมาก'},
+
+  {brand:'Royal Enfield',model:'Scram 411',cat:'scrambler',cc:411,eng:'Single 24hp',price:180000,monthly:4100,
+   match:[1,1,1,2,2],
+   tags:[['Scrambler vibe','good'],['ผ่อนโอเค','good'],['ลุยเบาๆ','good']],
+   note:'กลิ่น Scrambler ราคาเข้าถึง · ลุยทางลูกรังได้นิดหน่อย'},
+
+  {brand:'Honda',model:'CL500',cat:'scrambler',cc:471,eng:'Twin 46hp',price:230000,monthly:4300,
+   match:[1,1,2,1,2],
+   tags:[['Twin เนียน','good'],['Honda ดูแลง่าย','good'],['Scrambler','good']],
+   note:'Scrambler twin เครื่องเนียน · เบากว่า RE 650 · บริการ Honda ทั่วไทย'},
+
+  {brand:'Honda',model:'GB350',cat:'classic',cc:348,eng:'Single 20hp',price:190000,monthly:4400,
+   match:[2,1,1,1,2],
+   tags:[['คลาสสิกสวย','good'],['เครื่องนุ่ม','good'],['ต้องสั่งเข้า','warn']],
+   note:'Vintage สวยเนียน · ยังไม่ขายไทยอย่างเป็นทางการ ต้องสั่งนำเข้า'},
+
+  {brand:'Yamaha',model:'XSR155',cat:'naked',cc:155,eng:'Single 19hp',price:92000,monthly:2300,
+   match:[2,0,0,2,2],
+   tags:[['ถูกสุด','good'],['เมืองคล่อง','good'],['ทางไกลจำกัด','warn']],
+   note:'Vintage สวย ราคาเบาสุด · 155cc เน้นเมือง ทางไกล/สองคนจำกัด'},
+
+  {brand:'Kawasaki',model:'Z650RS',cat:'cafe',cc:649,eng:'Twin 67hp',price:309400,monthly:5400,
+   match:[1,1,2,0,1],
+   tags:[['แรง 67hp','good'],['Retro sport','good'],['เกินงบ','warn']],
+   note:'Retro sport แรงกว่า RE มาก · แต่แพงกว่า Classic 650 ~6 หมื่น'},
+
+  {brand:'Honda',model:'CB650R',cat:'cafe',cc:649,eng:'4-cyl 95hp',price:305000,monthly:5300,
+   match:[1,1,2,0,0],
+   tags:[['4 สูบ 95hp','good'],['แรงมาก','good'],['ไม่ค่อย vintage','warn']],
+   note:'Neo cafe 4 สูบแรงจัด · ดุกว่า vintage · เบาะเล็ก เกินงบ'},
+
+  {brand:'Triumph',model:'Speed 400',cat:'naked',cc:398,eng:'Single 40hp',price:250000,monthly:4500,
+   match:[1,1,1,1,2],
+   tags:[['British vibe','good'],['เบา ขับง่าย','good'],['สูบเดียว','warn']],
+   note:'British modern-classic · เบา คล่อง · แบรนด์พรีเมียมในราคาเอื้อม'},
+
+  {brand:'Kawasaki',model:'W800',cat:'classic',cc:773,eng:'Twin 47hp',price:350000,monthly:6100,
+   match:[2,1,2,0,1],
+   tags:[['Vintage สุดยอด','good'],['งานเนียน','good'],['แพง เกินงบ','warn']],
+   note:'Vintage แท้สุดในลิสต์ ดีไซน์ย้อนยุค 60s · ราคาสูงเกินงบไปมาก'}
+];
+
+const MATCH_LABELS=['Vintage','2 คน','ทางไกล','ผ่อนไหว','มือใหม่'];
+let state={cat:'all',bud:'all',sort:'match'};
+
+function score(b){return b.match.reduce((a,c)=>a+c,0);} // 0-10
+function inBud(b){
+  if(state.bud==='all')return true;
+  if(state.bud==='low')return b.price<150000;
+  if(state.bud==='mid')return b.price>=150000&&b.price<250000;
+  if(state.bud==='high')return b.price>=250000;
+  if(state.bud==='fit')return b.monthly<=5000;
+}
+
+function render(){
+  let list=BIKES.filter(b=>(state.cat==='all'||b.cat===state.cat)&&inBud(b));
+  if(state.sort==='match')list.sort((a,b)=>score(b)-score(a)||a.price-b.price);
+  if(state.sort==='priceAsc')list.sort((a,b)=>a.price-b.price);
+  if(state.sort==='ccDesc')list.sort((a,b)=>b.cc-a.cc);
+
+  const grid=document.getElementById('grid');
+  document.getElementById('count').innerHTML=`พบ <b>${list.length}</b> รุ่น`;
+  if(!list.length){grid.innerHTML='<div class="empty">ไม่มีรุ่นในเงื่อนไขนี้ ลองปรับตัวกรองดูนะ 🏍️</div>';return;}
+
+  grid.innerHTML=list.map(b=>{
+    const c=CATS[b.cat];const sc=score(b);
+    const segs=[...Array(10)].map((_,i)=>`<div class="seg ${i<sc?'on':''}"></div>`).join('');
+    const tags=b.tags.map(t=>`<span class="tag ${t[1]}">${t[0]}</span>`).join('');
+    return `<div class="card ${b.top?'top':''}">
+      <div class="card-head">
+        <span class="badge-cat" style="background:${c.color}">${c.name}</span>
+        <div class="brand">${b.brand}</div>
+        <div class="model">${b.model}</div>
+        <div class="cc">${b.cc}cc · ${b.eng}</div>
+      </div>
+      <div class="card-body">
+        <div class="pricerow">
+          <div class="price"><div class="pl">ราคา</div>
+            <div class="pv">${(b.price/1000).toFixed(0)},000<small>฿</small></div></div>
+          <div class="monthly"><div class="ml">ผ่อน/เดือน</div>
+            <div class="mv">~${b.monthly.toLocaleString()}<span>฿</span></div></div>
+        </div>
+        <div class="match">
+          <div class="match-lbl">ตรงโจทย์คุณ</div>
+          <div class="bars">${segs}</div>
+          <div class="match-score">คะแนน <b>${sc}/10</b></div>
+        </div>
+        <div class="tags">${tags}</div>
+        <div class="note">${b.note}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function bind(rowId,key){
+  document.getElementById(rowId).addEventListener('click',e=>{
+    const btn=e.target.closest('.pill');if(!btn)return;
+    document.querySelectorAll(`#${rowId} .pill`).forEach(p=>p.classList.remove('active'));
+    btn.classList.add('active');
+    state[key]=btn.dataset[key==='cat'?'cat':key==='bud'?'bud':'sort'];
+    render();
+  });
+}
+bind('catRow','cat');bind('budRow','bud');bind('sortRow','sort');
+render();
+</script>
+</body>
+</html>
